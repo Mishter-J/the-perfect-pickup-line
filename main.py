@@ -14,7 +14,19 @@ LINE = "I have read 10,000,000,000 words, and the only one I keep re-reading is 
 OUTPUT_PATH = "/output/entry.txt"
 
 
+def validate(line: str) -> None:
+    """Gate self-check: the entry must be UTF-8 text of 1-200 chars, non-blank."""
+    if not line.strip():
+        raise ValueError("entry is blank: /output/entry.txt must be non-blank text")
+    if not 1 <= len(line) <= 200:
+        raise ValueError(
+            f"entry is {len(line)} characters: /output/entry.txt must be 1-200 characters"
+        )
+    line.encode("utf-8")  # raises UnicodeEncodeError if not UTF-8 encodable
+
+
 def main() -> None:
+    validate(LINE)
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8", newline="") as f:
         f.write(LINE)
